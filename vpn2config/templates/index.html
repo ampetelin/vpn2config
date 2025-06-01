@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AmneziaWG Link Decoder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #121212;
+            color: #f1f1f1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .header h2 {
+            font-size: 1.8rem;
+            color: #e0e0e0;
+            margin: 0;
+        }
+
+        .github-icon {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+        }
+
+        .github-icon svg {
+            fill: #ffffff;
+            transition: fill 0.3s ease;
+        }
+
+        .github-icon:hover svg {
+            fill: #4CAF50;
+        }
+
+        textarea, input, button, pre {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+
+        textarea, input {
+            background-color: #333;
+            color: #f1f1f1;
+            border: 1px solid #444;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #e0e0e0;
+            color: #121212;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        pre {
+            background-color: #2c2c2c;
+            color: #f1f1f1;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            padding: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        pre::after {
+            content: "Click to copy";
+            font-size: 0.9rem;
+            color: #777;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s, visibility 0.5s;
+            z-index: 9999;
+        }
+
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>AmneziaWG Link Decoder (vpn:// → config)</h2>
+            <a class="github-icon" href="https://github.com/ampetelin/vpn2config" title="View on GitHub">
+                <svg aria-hidden="true" height="24" viewBox="0 0 16 16" width="24">
+                    <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+                </svg>
+            </a>
+        </div>
+        <form method="POST" action="/">
+            <textarea name="link" rows="4" placeholder="Paste your AmneziaWG link here">{{ request.form.link }}</textarea>
+            <button type="submit">Convert</button>
+        </form>
+        {% if output %}
+            <pre id="output" onclick="copyToClipboard()">{{ output }}</pre>
+        {% endif %}
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <script>
+        function copyToClipboard() {
+            const outputText = document.getElementById('output').textContent;
+            navigator.clipboard.writeText(outputText).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }).catch(err => {
+                alert('Failed to copy text: ' + err);
+            });
+        }
+    </script>
+</body>
+</html>

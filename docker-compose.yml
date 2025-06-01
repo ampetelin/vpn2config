@@ -1,0 +1,11 @@
+services:
+  vpn2config:
+    build:
+      context: .
+    container_name: vpn2config
+    ports:
+      - "8000:8000"
+    environment:
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      SENTRY_DSN: ${SENTRY_DSN:-}
+    restart: unless-stopped
