@@ -2,6 +2,7 @@ services:
   vpn2config:
     build:
       context: .
+    image: vpn2config
     container_name: vpn2config
     ports:
       - "8000:8000"
